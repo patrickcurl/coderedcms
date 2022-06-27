@@ -1,0 +1,41 @@
+{
+  "defineConstant": {
+    "DEBUG": true
+  },
+  "exclude": [
+    "**/node_modules",
+    "**/__pycache__",
+    "**/.venv"
+  ],
+  "include": [
+    // "tests/**/*.py",
+    "server/**/*.py",
+    "apps/**/*.py",
+    "core/**/*.py",
+    "typings/**"
+  ],
+  "pythonPlatform": "Linux",
+  "pythonVersion": "3.10",
+  "reportConstantRedefinition": "none",
+  "reportIncompatibleMethodOverride": "none",
+  "reportIncompatibleVariableOverride": false,
+  "reportMissingImports": false,
+  "reportMissingModuleSource": false,
+  "reportMissingTypeStubs": false,
+  "reportPrivateUsage": false,
+  "reportUninitializedInstanceVariable": "error",
+  "reportUnknownParameterType": false,
+  "reportUnknownVariableType": false,
+  "reportUnnecessaryCast": "warning",
+  "reportUnnecessaryComparison": "warning",
+  "reportUntypedClassDecorator": true,
+  "reportUntypedFunctionDecorator": true,
+  "strictDictionaryInference": true,
+  "strictListInference": true,
+  // "reportUnnecessaryIsInstance": false,
+  // "reportIncompatibleMethodOverride": false
+  "strictSetInference": true,
+  "typeCheckingMode": "basic",
+  "useLibraryCodeForTypes": true,
+  "venv": "/home/patrick/dev/clients/supermind/test/ids/.venv"
+}
