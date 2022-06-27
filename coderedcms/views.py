@@ -1,28 +1,29 @@
 import mimetypes
 import os
-from itertools import chain
 from datetime import datetime
-from django.http import Http404, HttpResponse, HttpResponsePermanentRedirect, JsonResponse
+from itertools import chain
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
-from django.core.paginator import Paginator, InvalidPage, EmptyPage, PageNotAnInteger
+from django.core.paginator import (EmptyPage, InvalidPage, PageNotAnInteger,
+                                   Paginator)
+from django.http import (Http404, HttpResponse, HttpResponsePermanentRedirect,
+                         JsonResponse)
 from django.shortcuts import redirect, render
 from django.utils import timezone
-from django.utils.translation import ngettext, gettext_lazy as _
+from django.utils.translation import gettext_lazy as _
+from django.utils.translation import ngettext
 from icalendar import Calendar
 from wagtail.admin import messages
-from wagtail.search.backends import db, get_search_backend
+from wagtail.search.backends import database, get_search_backend
 from wagtail.search.models import Query
+
 from coderedcms import utils
 from coderedcms.forms import SearchForm
-from coderedcms.models import (
-    CoderedPage,
-    CoderedEventPage,
-    get_page_models,
-    GeneralSettings,
-    LayoutSettings
-)
-from coderedcms.importexport import convert_csv_to_json, import_pages, ImportPagesFromCSVFileForm
+from coderedcms.importexport import (ImportPagesFromCSVFileForm,
+                                     convert_csv_to_json, import_pages)
+from coderedcms.models import (CoderedEventPage, CoderedPage, GeneralSettings,
+                               LayoutSettings, get_page_models)
 from coderedcms.settings import crx_settings
 
 
@@ -53,13 +54,13 @@ def search(request):
         # search specified page types in the desired order and chain the results together.
         # This provides better search results than simply searching limited fields on CoderedPage.
         db_models = []
-        if backend.__class__ == db.SearchBackend:
+        if backend.__class__ == database.SearchBackend:
             for model in get_page_models():
                 if model.search_db_include:
                     db_models.append(model)
             db_models = sorted(db_models, reverse=True, key=lambda k: k.search_db_boost)
 
-        if backend.__class__ == db.SearchBackend and db_models:
+        if backend.__class__ == database.SearchBackend and db_models:
             for model in db_models:
                 # if search_model is provided, only search on that model
                 if not search_model or search_model == ContentType.objects.get_for_model(model).model:  # noqa
