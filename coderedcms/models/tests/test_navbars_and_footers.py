@@ -8,8 +8,8 @@ from django.test import Client
 # from django.db.migrations.executor import MigrationExecutor
 # from django.db import connection
 
-from wagtail.tests.utils import WagtailPageTests
-from wagtail.core.models import Site
+from wagtail.test.utils import WagtailPageTests
+from wagtail.models import Site
 
 from coderedcms.tests.testapp.models import WebPage
 from coderedcms.models.snippet_models import Footer, Navbar

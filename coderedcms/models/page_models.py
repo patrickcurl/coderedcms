@@ -39,19 +39,19 @@ from icalendar import Event as ICalEvent
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from modelcluster.tags import ClusterTaggableManager
 from taggit.models import TaggedItemBase
-from wagtail.admin.edit_handlers import (FieldPanel, FieldRowPanel,
+from wagtail import hooks
+from wagtail.admin.panels import (FieldPanel, FieldRowPanel,
                                          InlinePanel, MultiFieldPanel,
                                          ObjectList, PageChooserPanel,
                                          StreamFieldPanel, TabbedInterface)
-from wagtail.contrib.forms.edit_handlers import FormSubmissionsPanel
+from wagtail.contrib.forms.panels import FormSubmissionsPanel
 from wagtail.contrib.forms.forms import WagtailAdminFormPageForm
 from wagtail.contrib.forms.models import FormSubmission
-from wagtail.core import hooks
-from wagtail.core.fields import StreamField
-from wagtail.core.models import Orderable, Page, PageBase, Site
-from wagtail.core.utils import resolve_model_string
+from wagtail.coreutils import resolve_model_string
+from wagtail.fields import StreamField
 from wagtail.images import get_image_model_string
 from wagtail.images.edit_handlers import ImageChooserPanel
+from wagtail.models import Orderable, Page, PageBase, Site
 from wagtail.search import index
 from wagtail.utils.decorators import cached_classmethod
 from wagtailcache.cache import WagtailCacheMixin
