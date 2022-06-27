@@ -7,23 +7,26 @@ import logging
 import os
 import warnings
 from datetime import date, datetime
-from typing import Dict, List, Optional, TYPE_CHECKING, Union
+from pathlib import Path
+from typing import TYPE_CHECKING, Dict, List, Optional, Union
 
 import geocoder
 from django import forms
 from django.conf import settings
 from django.contrib import messages
-from django.core.files.uploadedfile import InMemoryUploadedFile, TemporaryUploadedFile
 from django.core.files.storage import FileSystemStorage
+from django.core.files.uploadedfile import (InMemoryUploadedFile,
+                                            TemporaryUploadedFile)
 from django.core.mail import EmailMessage
-from django.core.paginator import Paginator, InvalidPage, EmptyPage, PageNotAnInteger
+from django.core.paginator import (EmptyPage, InvalidPage, PageNotAnInteger,
+                                   Paginator)
 from django.core.serializers.json import DjangoJSONEncoder
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
-from django.http import JsonResponse, HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect, JsonResponse
+from django.shortcuts import redirect, render
 from django.template import Context, Template
 from django.template.loader import render_to_string
 from django.utils import timezone
@@ -35,60 +38,44 @@ from icalendar import Alarm
 from icalendar import Event as ICalEvent
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from modelcluster.tags import ClusterTaggableManager
-from pathlib import Path
 from taggit.models import TaggedItemBase
-from wagtail.admin.edit_handlers import (
-    FieldPanel,
-    FieldRowPanel,
-    InlinePanel,
-    MultiFieldPanel,
-    ObjectList,
-    PageChooserPanel,
-    StreamFieldPanel,
-    TabbedInterface
-)
-from wagtail.core import hooks
-from wagtail.core.fields import StreamField
-from wagtail.core.models import Orderable, PageBase, Page, Site
-from wagtail.core.utils import resolve_model_string
+from wagtail.admin.edit_handlers import (FieldPanel, FieldRowPanel,
+                                         InlinePanel, MultiFieldPanel,
+                                         ObjectList, PageChooserPanel,
+                                         StreamFieldPanel, TabbedInterface)
 from wagtail.contrib.forms.edit_handlers import FormSubmissionsPanel
 from wagtail.contrib.forms.forms import WagtailAdminFormPageForm
+from wagtail.contrib.forms.models import FormSubmission
+from wagtail.core import hooks
+from wagtail.core.fields import StreamField
+from wagtail.core.models import Orderable, Page, PageBase, Site
+from wagtail.core.utils import resolve_model_string
 from wagtail.images import get_image_model_string
 from wagtail.images.edit_handlers import ImageChooserPanel
-from wagtail.contrib.forms.models import FormSubmission
 from wagtail.search import index
 from wagtail.utils.decorators import cached_classmethod
 from wagtailcache.cache import WagtailCacheMixin
 from wagtailseo.models import SeoMixin, TwitterCard
-from wagtailseo.utils import get_struct_data_images, StructDataEncoder
+from wagtailseo.utils import StructDataEncoder, get_struct_data_images
 
 from coderedcms import utils
-from coderedcms.blocks import (
-    CONTENT_STREAMBLOCKS,
-    LAYOUT_STREAMBLOCKS,
-    STREAMFORM_BLOCKS,
-    ContentWallBlock,
-)
+from coderedcms.blocks import (CONTENT_STREAMBLOCKS, LAYOUT_STREAMBLOCKS,
+                               STREAMFORM_BLOCKS, ContentWallBlock)
 from coderedcms.fields import CoderedStreamField, ColorField
 from coderedcms.forms import CoderedFormBuilder, CoderedSubmissionsListView
 from coderedcms.models.snippet_models import ClassifierTerm
-from coderedcms.models.wagtailsettings_models import (
-    GeneralSettings,
-    GoogleApiSettings,
-    LayoutSettings,
-)
-from coderedcms.wagtail_flexible_forms.blocks import FormFieldBlock, FormStepBlock
-from coderedcms.wagtail_flexible_forms.models import (
-    Step,
-    Steps,
-    StreamFormMixin,
-    StreamFormJSONEncoder,
-    SessionFormSubmission,
-    SubmissionRevision,
-)
+from coderedcms.models.wagtailsettings_models import (GeneralSettings,
+                                                      GoogleApiSettings,
+                                                      LayoutSettings)
 from coderedcms.settings import crx_settings
+from coderedcms.wagtail_flexible_forms.blocks import (FormFieldBlock,
+                                                      FormStepBlock)
+from coderedcms.wagtail_flexible_forms.models import (SessionFormSubmission,
+                                                      Step, Steps,
+                                                      StreamFormJSONEncoder,
+                                                      StreamFormMixin,
+                                                      SubmissionRevision)
 from coderedcms.widgets import ClassifierSelectWidget
-
 
 if TYPE_CHECKING:
     from wagtail.images.models import AbstractImage

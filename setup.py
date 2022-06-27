@@ -1,5 +1,7 @@
 import os
+
 from setuptools import setup
+
 from coderedcms import __version__
 
 with open(os.path.join(os.path.dirname(__file__), "README.md"), encoding="utf8") as readme:
@@ -49,9 +51,9 @@ setup(
         'Django>=3.2,<4.1',             # should be the same as wagtail
         'geocoder==1.38.*',
         'icalendar==4.0.*',
-        'wagtail==2.16.*',
-        'wagtail-cache==1.*',
-        'wagtail-seo==1.*',
+        'wagtail==3.*',
+        'wagtail-cache==2.*',
+        'wagtail-seo==2.*',
     ],
     entry_points={
         "console_scripts": [
