@@ -352,7 +352,7 @@ class CoderedPage(WagtailCacheMixin, SeoMixin, Page, metaclass=CoderedPageMeta):
                 classname='integrations'
             ))
 
-        return TabbedInterface(panels).bind_to(model=cls)
+        return TabbedInterface(panels).bind_to(model=cls.model)
 
     @property
     def seo_logo(self) -> "Optional[AbstractImage]":
